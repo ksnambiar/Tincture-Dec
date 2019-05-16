@@ -38,6 +38,12 @@ function main(){
                           }
                         
                           handleStart(peer)
+                          peer.on("peer:discovery",(peer1)=>{
+                            console.log("peer discovered:"+peer1.id.toB58String())
+                            })
+                        peer.on("peer:connect",(peer1)=>{
+                            console.log("peer discovered:"+peer1.id.toB58String())
+                            })
                         })
             })
         }
