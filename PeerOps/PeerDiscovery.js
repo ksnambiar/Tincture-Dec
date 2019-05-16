@@ -23,9 +23,11 @@ function startDiscovery(){
           // No need to dial, autoDial is on
           console.log('Discovered:', peer.id.toB58String())
         })
-      
         node.on('peer:connect', (peer) => {
           console.log('Connection established to:', peer.id.toB58String())
+        })
+        node.on('peer:disconnect',(peer) => {
+            console.log('Connection exited:', peer.id.toB58String())
         })
       })
 }

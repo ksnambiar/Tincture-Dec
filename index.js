@@ -1,7 +1,9 @@
 //creating node in here
 const fs = require("fs");
-
 const {handleStart,createPeer,existingPeer} = require("./PeerOps/PeerInit");
+
+//bradcasting functions
+const {broadCastReciever,broadCastSender} = require("./PeerOps/Broadcast");
 
 
 
@@ -39,11 +41,16 @@ function main(){
                         
                           handleStart(peer)
                           peer.on("peer:discovery",(peer1)=>{
-                            console.log("peer discovered:"+peer1.id.toB58String())
+                              console.log("peer discovered:"+peer1.id.toB58String())
                             })
+                            
                         peer.on("peer:connect",(peer1)=>{
-                            console.log("peer discovered:"+peer1.id.toB58String())
+                            console.log("peer connected:"+peer1.id.toB58String())
+                            broadCastSender(peer,"tincture",JSON.stringify({sidharth:"great"}))
                             })
+                            peer.on("peer:disconnect",(peer1)=>{
+                                console.log("peer disconnected:"+peer1.id.toB58String())
+                                })
                         })
             })
         }

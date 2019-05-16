@@ -21,6 +21,7 @@ const DEFAULT_OPTS = {
         Bootstrap
     ]
   },
+
   config:{
       peerDiscovery:{
           autoDial: true,
@@ -29,6 +30,9 @@ const DEFAULT_OPTS = {
               enabled:true,
               list:JSON.parse(bootstrapers)
           }
+      },
+      EXPERIMENTAL: {
+        pubsub: true
       }
   }
 }
