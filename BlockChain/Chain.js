@@ -33,3 +33,5 @@ class Tincture {
     //proof of authority implementation
     //validation by peers
 }
+
+module.exports= {Tincture}

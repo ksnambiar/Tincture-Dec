@@ -1,0 +1,12 @@
+const RELOAD_DATA="RELOAD_DATA"
+const ADD_DATA="ADD_DATA"
+const REMOVE_DATA="REMOVE_DATA"
+const CHANGE_DATA="CHANGE_DATA"
+
+
+module.exports={
+    RELOAD_DATA,
+    ADD_DATA,
+    REMOVE_DATA,
+    CHANGE_DATA
+}

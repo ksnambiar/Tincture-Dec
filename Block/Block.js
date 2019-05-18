@@ -18,4 +18,4 @@ class Block {
         //remove nonce later
         return sha256(this.nonce+this.prevHash+this.height+this.total_txn+this.curr_txns+this.proof+this.timeStamp+JSON.stringify(this.txns)+JSON.stringify(this.validators)+JSON.stringify(this.signatures))
     }
-}
+} 
