@@ -4,28 +4,47 @@ const sha256 = require("crypto-js/sha256")
 
 class Tincture {
     constructor(){
-        this.chain=[this.genGenesisBlock()]
+        this.chain=[]
         this.PendingTxns=[]
-    }
+    } 
     genGenesisBlock(){
-        fs.readFile(__dirname+"/../utils/genesis.json",(err,data)=>{
-            if(err){
-                let genesis = new Block(-1,sha256("sha2569xa3s81qw6d2x1x38ve48q").toString(),0,new Date().getTime(),[],[],"")
-                genesis.currHash=sha256(parsedData).toString()
-                return genesis                
+        return new Promise((resolve,reject)=>{
+            fs.readFile(__dirname+"/../utils/genesis.json",(err,data)=>{
+                if(err){
+                    let genesis = new Block(-1,sha256("sha2569xa3s81qw6d2x1x38ve48q").toString(),0,new Date().getTime(),[],[],"")
+                fs.writeFileSync(__dirname+"/../utils/genesis.json",JSON.stringify(genesis))
+                    genesis.currHash=genesis.calc_Hash()
+                
+                reject(genesis)     
             }
             else
             {
                 let parsedData = JSON.parse(data)
-                let genesis = new Block(-1,sha256(parsedData).toString(),data.total_txn,data.timestamp,data.txns,data.validator_set,data.signatures,"")
-                genesis.currHash=sha256(parsedData).toString()
+                let genesis = new Block(-1,sha256(parsedData).toString(),parsedData.total_txn,parsedData.timeStamp,parsedData.txns,parsedData.validator_set,parsedData.signatures,"")
+                genesis.currHash=genesis.calc_Hash()
                 //lastLen,last_hash="",total_txn=0,timeStamp,txns=[],validator_set=[],signatures=[],proof=""
-                return genesis
+                resolve(genesis)
             }
         })
+        })
+        // fs.readFile(__dirname+"/../utils/genesis.json",(err,data)=>{
+        //     if(err){
+        //         let genesis = new Block(-1,sha256("sha2569xa3s81qw6d2x1x38ve48q").toString(),0,new Date().getTime(),[],[],"")
+        //         genesis.currHash=genesis.calc_Hash()
+        //         return genesis                
+        //     }
+        //     else
+        //     {
+        //         let parsedData = JSON.parse(data)
+        //         let genesis = new Block(-1,sha256(parsedData).toString(),data.total_txn,data.timestamp,data.txns,data.validator_set,data.signatures,"")
+        //         genesis.currHash=genesis.calc_Hash()
+        //         //lastLen,last_hash="",total_txn=0,timeStamp,txns=[],validator_set=[],signatures=[],proof=""
+        //         return genesis
+        //     }
+        // })
     }
-    addToPendingTransaction(block){
-        this.chain.push(block)
+    addToPendingTransaction(txn){
+        this.PendingTxns.push(txn)
     }
     restoreBlockchainData(data){
         this.chain=data

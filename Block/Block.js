@@ -1,4 +1,5 @@
 const fs = require("fs")
+const sha256=require("crypto-js/sha256")
 class Block { 
     constructor(lastLen,last_hash="",total_txn=0,timeStamp,txns=[],validator_set=[],signatures=[],proof=""){
         this.height=lastLen+1;
@@ -16,6 +17,8 @@ class Block {
     }
     calc_Hash(){
         //remove nonce later
-        return sha256(this.nonce+this.prevHash+this.height+this.total_txn+this.curr_txns+this.proof+this.timeStamp+JSON.stringify(this.txns)+JSON.stringify(this.validators)+JSON.stringify(this.signatures))
+        return sha256(this.nonce+this.prevHash+this.height+this.total_txn+this.curr_txns+this.proof+this.timeStamp+JSON.stringify(this.txns)+JSON.stringify(this.validators)+JSON.stringify(this.signatures)).toString()
     }
 } 
+
+module.exports=Block

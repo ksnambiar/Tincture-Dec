@@ -28,19 +28,53 @@ function addDataToChain(value) {
           addChainData(i, value);
         });
 }
-
-function reloadChainData(){
-    let i=0;
-    let chainLoaded=[]
-    db.createReadStream().on('data',function(data){
-        chainLoaded.push(data)
-    })
-    .on('error',function(err){
-        console.log(err)
-    })
-    .on('close',function(){
-        return chainLoaded
-    })
+function getBlocksCount(){
+    let len=0;
+    db.createReadStream()
+.on('data', function (data) {
+      ++len;
+ })
+.on('error', function (err) {
+    console.log(err)
+    return 0 
+ })
+ .on('close', function () {
+    return len    
+});
 }
 
-module.exports={addChainData,getChainData,addDataToChain,reloadChainData}
+function reloadChainData(){
+    return new Promise((resolve,reject)=>{
+        let i=0;
+    let chainLoaded=[]
+    db.createReadStream().on('data',function(data){
+        console.log(data.value)
+        chainLoaded.push(JSON.parse(data.value))
+    })
+    .on('error',function(err){
+        reject(err)
+    })
+    .on('close',function(){
+        resolve(chainLoaded)
+    })
+    })    
+}
+
+function checkExistence(){
+    return new Promise((resolve,reject)=>{
+        db.get(0, function(err, value) {
+            if(err){
+                reject(false)
+            }else{
+                resolve(true)
+            }
+          })
+    })
+}
+// addDataToChain("helloasdasd")
+// reloadChainData()
+// .then(obj=>console.log(obj))
+// addChainData(0,"hello")
+// console.log(checkExistence())
+// checkExistence().then(obj=>console.log(obj))
+module.exports={addChainData,getChainData,addDataToChain,reloadChainData,getBlocksCount,checkExistence}
