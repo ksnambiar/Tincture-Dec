@@ -3,6 +3,7 @@ const fs = require("fs");
 const {handleStart,createPeer,existingPeer} = require("./PeerOps/PeerInit");
 //bradcasting functions
 const {broadCastReciever,broadCastSender} = require("./PeerOps/Broadcast");
+const {typeHandler} = require("./Handlers/transactionHandler")
 const {Tincture } = require("./BlockChain/Chain");
 const {checkExistence,reloadChainData}= require("./PersistantStorage/ChainData")
 const {reloadData,generateChain,updateValidatorSet,updatePeerInfo} = require("./Handlers/handler")
@@ -65,7 +66,7 @@ function nodeOps(){
                             throw err
                           }
                           updatePeerInfo(peer)
-                        
+                          
                           handleStart(peer)
                           peer.on("peer:discovery",(peer1)=>{
                               console.log("peer discovered:"+peer1.id.toB58String())

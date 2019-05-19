@@ -4,10 +4,15 @@ const Block= require("../Block/Block");
 const {DataStoreTxn} = require("../Block/Transaction");
 const {addChainData,addDataToChain,getBlocksCount,getChainData} = require("../PersistantStorage/ChainData");
 const fs = require("fs");
+const uid4 = require("uuid/v4")
 
-const addTransactionToPending= () =>{
-    let newTxn=new DataStoreTxn()
-    Tinstance.addToPendingTransaction()
+const addTransactionToPending=(owner,time,signature) =>{
+    let newTxn=new DataStoreTxn(uid4(),owner,time,signature)
+    Tinstance.addToPendingTransaction(newTxn)
+}
+
+const addNewBlockToChain=(block)=>{
+    let newBlock=new Block(block.height,block.currHash,block.prevHash,block.total_txn,block.curr_txns,block.proof,block.timeStamp,block.txns,block.validators,block.signatures)
 }
 const reloadData=(data)=>{
     let tempChain=[]
@@ -52,4 +57,11 @@ const updatePeerInfo=(peer)=>{
     Tinstance.peerInfo=peer
 }
 
-module.exports={reloadData,generateChain,updateValidatorSet,updatePeerInfo}
+module.exports={
+    reloadData,
+    generateChain,
+    updateValidatorSet,
+    updatePeerInfo,
+    addTransactionToPending,
+    addNewBlockToChain
+}
