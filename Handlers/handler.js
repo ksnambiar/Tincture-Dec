@@ -48,5 +48,8 @@ const generateChain = ()=>{
 const updateValidatorSet=(address)=>{
     Tinstance.validators.push(address)    
 }
+const updatePeerInfo=(peer)=>{
+    Tinstance.peerInfo=peer
+}
 
-module.exports={reloadData,generateChain,updateValidatorSet}
+module.exports={reloadData,generateChain,updateValidatorSet,updatePeerInfo}

@@ -5,7 +5,7 @@ const {handleStart,createPeer,existingPeer} = require("./PeerOps/PeerInit");
 const {broadCastReciever,broadCastSender} = require("./PeerOps/Broadcast");
 const {Tincture } = require("./BlockChain/Chain");
 const {checkExistence,reloadChainData}= require("./PersistantStorage/ChainData")
-const {reloadData,generateChain,updateValidatorSet} = require("./Handlers/handler")
+const {reloadData,generateChain,updateValidatorSet,updatePeerInfo} = require("./Handlers/handler")
 let chainInstance= new Tincture()
 console.log(chainInstance)
 
@@ -64,6 +64,7 @@ function nodeOps(){
                           if (err) {
                             throw err
                           }
+                          updatePeerInfo(peer)
                         
                           handleStart(peer)
                           peer.on("peer:discovery",(peer1)=>{
@@ -72,7 +73,6 @@ function nodeOps(){
                             
                         peer.on("peer:connect",(peer1)=>{
                             console.log("peer connected:"+peer1.id.toB58String())
-                            console.log("")
                             updateValidatorSet(peer1.id.toB58String())
                             // broadCastSender(peer,"tincture",JSON.stringify({sidharth:"great"}))
                             })
