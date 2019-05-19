@@ -6,6 +6,7 @@ class Tincture {
     constructor(){
         this.chain=[]
         this.PendingTxns=[]
+        this.validators=[]
     } 
     genGenesisBlock(){
         return new Promise((resolve,reject)=>{

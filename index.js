@@ -5,7 +5,7 @@ const {handleStart,createPeer,existingPeer} = require("./PeerOps/PeerInit");
 const {broadCastReciever,broadCastSender} = require("./PeerOps/Broadcast");
 const {Tincture } = require("./BlockChain/Chain");
 const {checkExistence,reloadChainData}= require("./PersistantStorage/ChainData")
-const {reloadData,generateChain} = require("./Handlers/handler")
+const {reloadData,generateChain,updateValidatorSet} = require("./Handlers/handler")
 let chainInstance= new Tincture()
 console.log(chainInstance)
 
@@ -32,75 +32,64 @@ function startChain(){
         })
     })
 }
-startChain()
-
+//includes the starting of the p2p node
 function nodeOps(){
-
+    fs.readFile(__dirname+"/utils/node_address.json",(err,data)=>{
+        
+        if(err){
+            console.log(err)
+            console.log(1)
+            createPeer((err, peer) => {
+                if (err) {
+                  throw err
+                }
+                
+                peer.start(err => {
+                  if (err) {
+                    throw err
+                  }
+                
+                  handleStart(peer)
+                })
+                }) 
+        }else{
+            let result=JSON.parse(data)
+            console.log(2)
+            existingPeer(result,(err,peer)=>{
+                if (err) {
+                          throw err
+                        }
+                        
+                        peer.start(err => {
+                          if (err) {
+                            throw err
+                          }
+                        
+                          handleStart(peer)
+                          peer.on("peer:discovery",(peer1)=>{
+                              console.log("peer discovered:"+peer1.id.toB58String())
+                            })
+                            
+                        peer.on("peer:connect",(peer1)=>{
+                            console.log("peer connected:"+peer1.id.toB58String())
+                            console.log("")
+                            updateValidatorSet(peer1.id.toB58String())
+                            // broadCastSender(peer,"tincture",JSON.stringify({sidharth:"great"}))
+                            })
+                            peer.on("peer:disconnect",(peer1)=>{
+                                console.log("peer disconnected:"+peer1.id.toB58String())
+                                })
+                        })
+            })
+        }
+    })
 }
 
+nodeOps()
 function main(){
     
     //start node
     //start chain
     //listen to messages and pass on to message handlers
 }
-
-
-
-
-
-
-
-
-
-
-// function main(){
-//     fs.readFile(__dirname+"/utils/node_address.json",(err,data)=>{
-        
-//         if(err){
-//             console.log(err)
-//             console.log(1)
-//             createPeer((err, peer) => {
-//                 if (err) {
-//                   throw err
-//                 }
-                
-//                 peer.start(err => {
-//                   if (err) {
-//                     throw err
-//                   }
-                
-//                   handleStart(peer)
-//                 })
-//                 }) 
-//         }else{
-//             let result=JSON.parse(data)
-//             console.log(2)
-//             existingPeer(result,(err,peer)=>{
-//                 if (err) {
-//                           throw err
-//                         }
-                        
-//                         peer.start(err => {
-//                           if (err) {
-//                             throw err
-//                           }
-                        
-//                           handleStart(peer)
-//                           peer.on("peer:discovery",(peer1)=>{
-//                               console.log("peer discovered:"+peer1.id.toB58String())
-//                             })
-                            
-//                         peer.on("peer:connect",(peer1)=>{
-//                             console.log("peer connected:"+peer1.id.toB58String())
-//                             broadCastSender(peer,"tincture",JSON.stringify({sidharth:"great"}))
-//                             })
-//                             peer.on("peer:disconnect",(peer1)=>{
-//                                 console.log("peer disconnected:"+peer1.id.toB58String())
-//                                 })
-//                         })
-//             })
-//         }
-//     })
-// }
 // main()

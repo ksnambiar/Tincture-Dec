@@ -45,4 +45,8 @@ const generateChain = ()=>{
     })
 }
 
-module.exports={reloadData,generateChain}
+const updateValidatorSet=(address)=>{
+    Tinstance.validators.push(address)    
+}
+
+module.exports={reloadData,generateChain,updateValidatorSet}
