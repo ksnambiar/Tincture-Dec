@@ -17,6 +17,10 @@ statefull reloading supported
 4. leveldb for persistant storage
 5. peer broadcast
 6. handlers to filter changes to chain
+7. handlers to handle incoming transaction(blockchain side)
+8. proof of authority (works just like the democratic voting system)
+
+
 # To run it-
 1. clone the repository
 2. go inside the folder and do "npm install" in the terminal
