@@ -15,6 +15,11 @@ const typeHandler= (data)=>{
         let selectedDelegate=data1.payload
         Tinstance.delegationResult.push(selectedDelegate)
         break;
+        //state operations
+        // case 'addSong':
+
+
+        
     }
 }
 module.exports={typeHandler}

@@ -57,6 +57,9 @@ const updatePeerInfo=(peer)=>{
     Tinstance.peerInfo=peer
 }
 
+//state operations
+ 
+
 module.exports={
     reloadData,
     generateChain,
