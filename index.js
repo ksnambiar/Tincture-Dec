@@ -87,7 +87,7 @@ function nodeOps(){
                               console.log("peer discovered:"+peer1.id.toB58String())
                             })
                             
-                        peer.once("peer:connect",(peer1)=>{
+                          peer.once("peer:connect",(peer1)=>{
                             console.log("peer connected:"+peer1.id.toB58String())
                             updateValidatorSet(peer1.id.toB58String())
                             // peer.pubsub.subscribe('tincture',(msg)=>{
@@ -98,6 +98,7 @@ function nodeOps(){
                             })
                             const fsub = new FloodSub(peer)
                             fsubStart(fsub)
+                            
                             // peer.on ("peer:disconnect",(peer1)=>{
                             //     console.log("peer disconnected:"+peer1.id.toB58String())
                             //     })
