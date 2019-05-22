@@ -109,3 +109,4 @@ function main(){
     //listen to messages and pass on to message handlers
 }
 // main()
+main()
