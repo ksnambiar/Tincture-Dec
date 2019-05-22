@@ -9,6 +9,7 @@ const {checkExistence,reloadChainData}= require("./PersistantStorage/ChainData")
 const {reloadData,generateChain,updateValidatorSet,updatePeerInfo} = require("./Handlers/handler")
 let chainInstance= new Tincture()
 console.log(chainInstance)
+let node
 
 function startChain(){
     //check whether data on chain data exists?
@@ -44,13 +45,25 @@ function nodeOps(){
                 if (err) {
                   throw err
                 }
+
                 
                 peer.start(err => {
                   if (err) {
                     throw err
                   }
-                
+                  node=peer;
+                  updatePeerInfo(peer)
+                  
                   handleStart(peer)
+                  peer.on("peer:discovery",(peer1)=>{
+                    console.log("peer discovered:"+peer1.id.toB58String())
+                  })
+                  
+              peer.once("peer:connect",(peer1)=>{
+                  console.log("peer connected:"+peer1.id.toB58String())
+                  updateValidatorSet(peer1.id.toB58String())
+                  // broadCastSender(peer,"tincture",JSON.stringify({sidharth:"great"}))
+                  })
                 })
                 }) 
         }else{
@@ -65,32 +78,34 @@ function nodeOps(){
                           if (err) {
                             throw err
                           }
+                          node=peer
                           updatePeerInfo(peer)
-                          
                           handleStart(peer)
                           peer.on("peer:discovery",(peer1)=>{
                               console.log("peer discovered:"+peer1.id.toB58String())
                             })
                             
-                        peer.on("peer:connect",(peer1)=>{
+                        peer.once("peer:connect",(peer1)=>{
                             console.log("peer connected:"+peer1.id.toB58String())
                             updateValidatorSet(peer1.id.toB58String())
                             // broadCastSender(peer,"tincture",JSON.stringify({sidharth:"great"}))
                             })
-                            peer.on("peer:disconnect",(peer1)=>{
-                                console.log("peer disconnected:"+peer1.id.toB58String())
-                                })
+                        broadCastReciever(peer,'tincture')
+                            // peer.on ("peer:disconnect",(peer1)=>{
+                            //     console.log("peer disconnected:"+peer1.id.toB58String())
+                            //     })
                         })
             })
         }
     })
 }
 
-nodeOps()
 function main(){
     
     //start node
+    startChain()
     //start chain
+    nodeOps()
     //listen to messages and pass on to message handlers
 }
 // main()
