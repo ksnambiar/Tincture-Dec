@@ -1,8 +1,9 @@
 //creating node in here
 const fs = require("fs");
+const FloodSub = require("libp2p-floodsub")
 const {handleStart,createPeer,existingPeer} = require("./PeerOps/PeerInit");
 //bradcasting functions
-const {broadCastReciever,broadCastSender} = require("./PeerOps/Broadcast");
+const {fsubStart} = require("./PeerOps/Broadcast");
 const {typeHandler} = require("./Handlers/transactionHandler")
 const {Tincture } = require("./BlockChain/Chain");
 const {checkExistence,reloadChainData}= require("./PersistantStorage/ChainData")
@@ -34,6 +35,7 @@ function startChain(){
         })
     })
 }
+
 //includes the starting of the p2p node
 function nodeOps(){
     fs.readFile(__dirname+"/utils/node_address.json",(err,data)=>{
@@ -88,9 +90,14 @@ function nodeOps(){
                         peer.once("peer:connect",(peer1)=>{
                             console.log("peer connected:"+peer1.id.toB58String())
                             updateValidatorSet(peer1.id.toB58String())
+                            // peer.pubsub.subscribe('tincture',(msg)=>{
+                                console.log(msg)
+                            // })
+                            // broadCastReciever(peer,'tincture')
                             // broadCastSender(peer,"tincture",JSON.stringify({sidharth:"great"}))
                             })
-                        broadCastReciever(peer,'tincture')
+                            const fsub = new FloodSub(peer)
+                            fsubStart(fsub)
                             // peer.on ("peer:disconnect",(peer1)=>{
                             //     console.log("peer disconnected:"+peer1.id.toB58String())
                             //     })

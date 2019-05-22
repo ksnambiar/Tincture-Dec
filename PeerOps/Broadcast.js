@@ -1,4 +1,9 @@
 const {typeHandler} = require("../Handlers/transactionHandler")
+const fsubStart=(fsub)=>{
+    fsub.start(err=>{
+        console.log(err)
+        })
+}
 const broadCastSender = (peer,topic,data)=>{
     peer.pubsub.publish(
         topic,
@@ -14,12 +19,12 @@ const broadCastSender = (peer,topic,data)=>{
 }
 
 const broadCastReciever = (peer,topic)=>{
-    peer.pubsub.subscribe(topic,
-      (msg) =>{ 
-          console.log(msg.from, JSON.parse(msg.data))
-          typeHandler(msg.data)
-    }
-    )
+    // peer.pubsub.subscribe(topic,
+    //   (msg) =>{ 
+    //       console.log(msg.from, JSON.parse(msg.data))
+    //     //   typeHandler(msg.data)
+    // }
+    // )
 }
 
-module.exports = {broadCastReciever,broadCastSender}
+module.exports = {broadCastReciever,broadCastSender,fsubStart}
