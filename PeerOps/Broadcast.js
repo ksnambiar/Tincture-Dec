@@ -1,14 +1,14 @@
 const {typeHandler} = require("../Handlers/transactionHandler")
 const fsubStart=(fsub)=>{
-    fsub.start(err=>{
-        console.log(err)
-        if(!err){
-            fsub.on('tincture',(data)=>{
-                console.log(data)
+    return new Promise((resolve,reject)=>{
+        fsub.start(err=>{
+            if(!err){
+                resolve("cool")
+            }else{
+                reject("uncool")
+            }
             })
-            fsub.subscribe('tincture')
-        }
-        })
+    })
 }
 const broadCastSender = (fsub,topic,data)=>{
     // peer.pubsub.publish(

@@ -3,7 +3,7 @@ const fs = require("fs");
 const FloodSub = require("libp2p-floodsub")
 const {handleStart,createPeer,existingPeer} = require("./PeerOps/PeerInit");
 //bradcasting functions
-const {fsubStart} = require("./PeerOps/Broadcast");
+const {fsubStart,broadCastSender} = require("./PeerOps/Broadcast");
 const {typeHandler} = require("./Handlers/transactionHandler")
 const {Tincture } = require("./BlockChain/Chain");
 const {checkExistence,reloadChainData}= require("./PersistantStorage/ChainData")
@@ -97,8 +97,17 @@ function nodeOps(){
                             // broadCastSender(peer,"tincture",JSON.stringify({sidharth:"great"}))
                             })
                             const fsub = new FloodSub(peer)
-                            fsubStart(fsub)
-                            
+                            fsubStart(fsub).then((res=>{
+                                console.log(res)
+                                fsub.subscribe('tincture')
+                                fsub.on('tincture',(data)=>{
+                                    console.log(data)
+                                })
+                                fsub.publish('tincture',new Buffer("cool news"))
+                            }))
+                            .catch(err=>{
+                                console.log(err)
+                            })
                             // peer.on ("peer:disconnect",(peer1)=>{
                             //     console.log("peer disconnected:"+peer1.id.toB58String())
                             //     })
