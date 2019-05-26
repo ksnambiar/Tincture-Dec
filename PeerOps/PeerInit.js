@@ -34,7 +34,7 @@ PeerInfo.create(peerInfo1.id,(err,peerInfo)=>{
   if(err){
     throw err
   }
-  const listenAddress = multiaddr(`/ip4/127.0.0.1/tcp/4001`)
+  const listenAddress = multiaddr(`/ip4/127.0.0.1/tcp/4002`)
     peerInfo.multiaddrs.add(listenAddress)
   console.log(peerInfo)
   const peer = new P2PNode({peerInfo})

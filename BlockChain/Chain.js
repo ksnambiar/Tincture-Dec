@@ -66,10 +66,13 @@ class Tincture {
             newBlock.currHash=newBlock.calc_Hash()
             
             //broadcast the new block
+            
             this.chain[this.chain.length-1]
+
 
         }else{
             //wait for the broadcast
+            return 0
         }
     }
     // isChainValid(){

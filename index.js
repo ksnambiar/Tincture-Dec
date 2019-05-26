@@ -1,9 +1,8 @@
 //creating node in here
 const fs = require("fs");
-const FloodSub = require("libp2p-floodsub")
 const {handleStart,createPeer,existingPeer} = require("./PeerOps/PeerInit");
 //bradcasting functions
-const {fsubStart,broadCastSender} = require("./PeerOps/Broadcast");
+const {broadCastSender,broadCastReciever} = require("./PeerOps/Broadcast");
 const {typeHandler} = require("./Handlers/transactionHandler")
 const {Tincture } = require("./BlockChain/Chain");
 const {checkExistence,reloadChainData}= require("./PersistantStorage/ChainData")
@@ -84,33 +83,22 @@ function nodeOps(){
                           updatePeerInfo(peer)
                           handleStart(peer)
                           peer.on("peer:discovery",(peer1)=>{
-                              console.log("peer discovered:"+peer1.id.toB58String())
+                            //   console.log("peer discovered:"+peer1.id.toB58String())
+                              updateValidatorSet(peer1.id.toB58String())
+
                             })
-                            
+                          
                           peer.once("peer:connect",(peer1)=>{
                             console.log("peer connected:"+peer1.id.toB58String())
-                            updateValidatorSet(peer1.id.toB58String())
-                            // peer.pubsub.subscribe('tincture',(msg)=>{
-                                console.log(msg)
-                            // })
-                            // broadCastReciever(peer,'tincture')
-                            // broadCastSender(peer,"tincture",JSON.stringify({sidharth:"great"}))
+                            
                             })
-                            const fsub = new FloodSub(peer)
-                            fsubStart(fsub).then((res=>{
-                                console.log(res)
-                                fsub.subscribe('tincture')
-                                fsub.on('tincture',(data)=>{
-                                    console.log(data)
-                                })
-                                fsub.publish('tincture',new Buffer("cool news"))
-                            }))
-                            .catch(err=>{
-                                console.log(err)
-                            })
-                            // peer.on ("peer:disconnect",(peer1)=>{
-                            //     console.log("peer disconnected:"+peer1.id.toB58String())
-                            //     })
+                            broadCastSender(peer,'topic',"no no cat")
+                            
+                            
+                            // setInterval(()=>{
+                                
+                            // },2000)
+                       
                         })
             })
         }
