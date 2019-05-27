@@ -84,10 +84,17 @@ function nodeOps(){
                           handleStart(peer)
                           peer.on("peer:discovery",(peer1)=>{
                             //   console.log("peer discovered:"+peer1.id.toB58String())
-                              updateValidatorSet(peer1.id.toB58String())
 
                             })
-                          
+                            peer.pubsub.subscribe('topic',
+                            (msg) => {console.log(msg.from, msg.data.toString())
+                            typeHandler(msg.data.toString(),peer)
+                            },
+                            (err) => {
+                                console.log("result")
+                              console.log(err)
+                            }
+                            )
                           peer.once("peer:connect",(peer1)=>{
                             console.log("peer connected:"+peer1.id.toB58String())
                             

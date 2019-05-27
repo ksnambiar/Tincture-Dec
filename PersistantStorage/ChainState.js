@@ -4,7 +4,7 @@ let db=level(stateData)
 // Add data to levelDB with key/value pair
 function addStateData(key,value){
     db.put(key, value, function(err) {
-      if (err) return console.log('Block ' + key + ' submission failed', err);
+      if (err) return console.log('Block' + key + ' submission failed', err);
     })
 }
 

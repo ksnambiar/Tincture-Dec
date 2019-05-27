@@ -63,13 +63,9 @@ class Tincture {
         this.currDelegator=max
         if(this.currDelegator===this.peerInfo.id.toB58String()){
             let newBlock = new Block(this.chain.length,this.chain[this.chain.length-1].currHash,this.chain[this.chain.length-1].total_txn,new Date().getTime(),this.PendingTxns,this.validators,[sha256(this.peerInfo.id.privKey).toString()],"")
-            newBlock.currHash=newBlock.calc_Hash()
-            
+            newBlock.currHash=newBlock.calc_Hash()   
             //broadcast the new block
-            
-            this.chain[this.chain.length-1]
-
-
+            return this.chain[this.chain.length-1]
         }else{
             //wait for the broadcast
             return 0
