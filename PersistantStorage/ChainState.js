@@ -8,7 +8,6 @@ function addStateData(key,value){
     })
 }
 
-
 // Get data from levelDB with key
 function getStateData(key){
     db.get(key, function(err, value) {
@@ -28,6 +27,17 @@ function getStateData(key){
 //           addChainData(i, value);
 //         });
 // }
+function checkExistence(){
+    return new Promise((resolve,reject)=>{
+        db.get(0, function(err, value) {
+            if(err){
+                reject(false)
+            }else{
+                resolve(true)
+            }
+          })
+    })
+}
 
 function reloadStateData(){
     let i=0;

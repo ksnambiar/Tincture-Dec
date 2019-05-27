@@ -35,6 +35,10 @@ function startChain(){
     })
 }
 
+function loadState(){
+    checkState
+}
+
 //includes the starting of the p2p node
 function nodeOps(){
     fs.readFile(__dirname+"/utils/node_address.json",(err,data)=>{
