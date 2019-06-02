@@ -5,6 +5,7 @@ const {handleStart,createPeer,existingPeer} = require("./PeerOps/PeerInit");
 const {broadCastSender,broadCastReciever} = require("./PeerOps/Broadcast");
 const {typeHandler} = require("./Handlers/transactionHandler")
 const {Tincture } = require("./BlockChain/Chain");
+const {checkStateExistence,reloadStateData} = require("./PersistantStorage/ChainState");
 const {checkExistence,reloadChainData}= require("./PersistantStorage/ChainData")
 const {reloadData,generateChain,updateValidatorSet,updatePeerInfo} = require("./Handlers/handler")
 let chainInstance= new Tincture()
@@ -27,7 +28,7 @@ function startChain(){
     .catch(bol=>{
         console.log("data doesnt exist so generating")
         generateChain().then(obj=>{
-        console.log("generted chain 1 \n")    
+        console.log("generted chain 1 \n")
         })
         .catch(obj=>{
             console.log("generated chain 2 \n")
@@ -35,14 +36,27 @@ function startChain(){
     })
 }
 
-function loadState(){
-    checkState
+function reloadState(){
+  checkStateExistence().then(obj=>{
+    console.log("state exists so reloading");
+    reloadingStateData().then(data=>{
+      
+    })
+  })
+  .catch(err=>{
+
+  })
 }
+
+
+// function loadState(){
+//     checkState
+// }
 
 //includes the starting of the p2p node
 function nodeOps(){
     fs.readFile(__dirname+"/utils/node_address.json",(err,data)=>{
-        
+
         if(err){
             console.log(err)
             console.log(1)
@@ -51,26 +65,26 @@ function nodeOps(){
                   throw err
                 }
 
-                
+
                 peer.start(err => {
                   if (err) {
                     throw err
                   }
                   node=peer;
                   updatePeerInfo(peer)
-                  
+
                   handleStart(peer)
                   peer.on("peer:discovery",(peer1)=>{
                     console.log("peer discovered:"+peer1.id.toB58String())
                   })
-                  
+
               peer.once("peer:connect",(peer1)=>{
                   console.log("peer connected:"+peer1.id.toB58String())
                   updateValidatorSet(peer1.id.toB58String())
                   // broadCastSender(peer,"tincture",JSON.stringify({sidharth:"great"}))
                   })
                 })
-                }) 
+                })
         }else{
             let result=JSON.parse(data)
             console.log(2)
@@ -78,7 +92,7 @@ function nodeOps(){
                 if (err) {
                           throw err
                         }
-                        
+
                         peer.start(err => {
                           if (err) {
                             throw err
@@ -101,15 +115,15 @@ function nodeOps(){
                             )
                           peer.once("peer:connect",(peer1)=>{
                             console.log("peer connected:"+peer1.id.toB58String())
-                            
+
                             })
                             broadCastSender(peer,'topic',"no no cat")
-                            
-                            
+
+
                             // setInterval(()=>{
-                                
+
                             // },2000)
-                       
+
                         })
             })
         }
@@ -117,7 +131,7 @@ function nodeOps(){
 }
 
 function main(){
-    
+
     //start node
     startChain()
     //start chain

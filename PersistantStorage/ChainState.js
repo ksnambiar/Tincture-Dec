@@ -7,13 +7,27 @@ function addStateData(key,value){
       if (err) return console.log('Block' + key + ' submission failed', err);
     })
 }
-
+function checkStateExistence(){
+    return new Promise((resolve,reject)=>{
+        db.get('song', function(err, value) {
+            if(err){
+                reject(false)
+            }else{
+                resolve(true)
+            }
+          })
+    })
+}
 // Get data from levelDB with key
 function getStateData(key){
     db.get(key, function(err, value) {
       if (err) return console.log('Not found!', err);
       console.log('Value = ' + value);
     })
+}
+
+function setStateData(data){
+
 }
 
 // function addDataToChain(value) {
@@ -40,17 +54,19 @@ function checkExistence(){
 }
 
 function reloadStateData(){
+  return newPromise((resolve,reject)=>{
     let i=0;
     let stateLoaded={}
     db.createReadStream().on('data',function(data){
         stateLoaded.push(data)
     })
     .on('error',function(err){
-        console.log(err)
+        reject(err)
     })
     .on('close',function(){
-        return stateLoaded
+        resolve(stateLoaded)
     })
+  })
 }
 
-module.exports={addStateData,getStateData,reloadStateData}
+module.exports={addStateData,getStateData,reloadStateData,checkStateExistence}
